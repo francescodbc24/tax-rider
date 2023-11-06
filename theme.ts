@@ -1,5 +1,5 @@
 export const COLORS={
-    primary:"purple",
+    primary:"#4b33a8",
     danger: "#fc766d",
     success: "#86d189",
     warning: "orange",
