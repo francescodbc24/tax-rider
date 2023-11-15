@@ -1,11 +1,12 @@
 export function NettoConsegna(
   priceCarburante: number,
   priceConsegna: number,
-  kmConsegna: number
+  kmConsegna: number,
+  kmXlitro:number
 ) {
   const iva2 = 5;
   const inps2 = 26.23;
-  let carburanteNetto = ((priceCarburante / 35) * kmConsegna);
+  let carburanteNetto = ((priceCarburante / kmXlitro) * kmConsegna);
   let consegnaFinal = (priceConsegna * 67) / 100;
   let I = (consegnaFinal * iva2) / 100;
   let IN = (consegnaFinal * inps2) / 100;
