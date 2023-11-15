@@ -1,5 +1,5 @@
-import { FunctionComponent, useState } from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { FunctionComponent, useEffect, useState } from "react";
+import { Text, View, StyleSheet, ScrollView } from "react-native";
 import Screen from "../components/Screen";
 import Card from "../components/controls/Card";
 import AppTextInput from "../components/controls/AppTextInput";
@@ -13,6 +13,7 @@ import * as Yup from "yup";
 import { FormikHelpers, FormikValues } from "formik";
 import SubmitButton from "../components/forms/SubmitButton";
 import BannerAdd from "../ads/BannerAdd";
+import { interstitial, loadInterstitial } from "../ads/interstial";
 
 interface CalcolateScreenProps {}
 interface IResult {
@@ -47,12 +48,14 @@ const CalcolateScreen: FunctionComponent<CalcolateScreenProps> = () => {
     gas: valid,
     delivery: valid,
     km: valid,
+    consume: valid,
   });
 
   const handleSubmit = async (
     values: FormikValues,
     helper: FormikHelpers<Values>
   ) => {
+    if (interstitial.loaded) interstitial.show();
     const { km, gas, delivery, consume } = values;
 
     const result = NettoConsegna(
@@ -66,85 +69,95 @@ const CalcolateScreen: FunctionComponent<CalcolateScreenProps> = () => {
       values: { consume, gas },
     });
   };
-  return (
-    <Screen style={{ backgroundColor: COLORS.primary }}>
-      <View
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: 20,
-        }}
-      >
-        <AppText
-          style={{ fontSize: 28, fontWeight: "bold", color: COLORS.white }}
-        >
-          Tax Rider
-        </AppText>
-      </View>
-      <Card padding={20} style={{ marginTop: 20, display: "flex", flex: 1 }}>
-        <AppText style={{marginBottom:20}}>Calcolo Consegna</AppText>
-        <AppForm
-          initialValues={{
-            consume: undefined,
-            gas: undefined,
-            km: undefined,
-            delivery: undefined,
-          }}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
-        >
-          <AppFormField
-            label={"Auto Km/litro"}
-            name="consume"
-            icon={"car"}
-            maxLength={10}
-            placeholder={"Inserisce km percorsi con 1 litro"}
-            keyboardType="numeric"
-          />
-          <AppFormField
-            label={"Costo benzina"}
-            name="gas"
-            icon={"gas-station"}
-            maxLength={10}
-            placeholder={"Inserisce ultimo prezzo benzina"}
-            keyboardType="numeric"
-          />
-          <AppFormField
-            label={"Costo consegna"}
-            name="delivery"
-            icon={"cash-refund"}
-            maxLength={10}
-            placeholder={"Inserisce costo consegna"}
-            keyboardType="numeric"
-          />
-          <AppFormField
-            label={"km da percorrere"}
-            name="km"
-            icon={"cash-refund"}
-            maxLength={10}
-            placeholder={"Inserisce km da percorrere"}
-            keyboardType="numeric"
-          />
-         <BannerAdd />
-          <SubmitButton title="Calcola" color="black" />
-        </AppForm>
 
-        <AppText style={styles.title}>Detaglio consegna</AppText>
-        <View style={styles.detail}>
-          <AppText style={styles.textDetail}>Benzina:</AppText>
-          <AppText>{result.benzina?.toFixed(2)} €</AppText>
+  useEffect(() => {
+    const unsubscribeInterstitialEvents = loadInterstitial();
+
+    return () => {
+      unsubscribeInterstitialEvents();
+    };
+  }, []);
+  return (
+    <ScrollView>
+      <Screen style={{ backgroundColor: COLORS.primary }}>
+        <View
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: 20,
+          }}
+        >
+          <AppText
+            style={{ fontSize: 28, fontWeight: "bold", color: COLORS.white }}
+          >
+            Tax Rider
+          </AppText>
         </View>
-        <View style={styles.detail}>
-          <AppText style={styles.textDetail}>Tasse:</AppText>
-          <AppText>{result.tasse?.toFixed(2)} €</AppText>
-        </View>
-        <View style={styles.detail}>
-          <AppText style={styles.textDetail}>Guadagno:</AppText>
-          <AppText>{result.netto?.toFixed(2)} €</AppText>
-        </View>
-      </Card>
-    </Screen>
+        <Card padding={20} style={{ marginTop: 20, display: "flex", flex: 1 }}>
+          <AppText style={{ marginBottom: 20 }}>Calcolo Consegna</AppText>
+          <AppForm
+            initialValues={{
+              consume: undefined,
+              gas: undefined,
+              km: undefined,
+              delivery: undefined,
+            }}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
+            <AppFormField
+              label={"Auto Km/litro"}
+              name="consume"
+              icon={"car"}
+              maxLength={10}
+              placeholder={"Inserisce km percorsi con 1 litro"}
+              keyboardType="numeric"
+            />
+            <AppFormField
+              label={"Costo benzina"}
+              name="gas"
+              icon={"gas-station"}
+              maxLength={10}
+              placeholder={"Inserisce ultimo prezzo benzina"}
+              keyboardType="numeric"
+            />
+            <AppFormField
+              label={"Costo consegna"}
+              name="delivery"
+              icon={"cash-refund"}
+              maxLength={10}
+              placeholder={"Inserisce costo consegna"}
+              keyboardType="numeric"
+            />
+            <AppFormField
+              label={"km da percorrere"}
+              name="km"
+              icon={"cash-refund"}
+              maxLength={10}
+              placeholder={"Inserisce km da percorrere"}
+              keyboardType="numeric"
+            />
+            <BannerAdd />
+            <SubmitButton title="Calcola" color="black" />
+          </AppForm>
+
+          <AppText style={styles.title}>Detaglio consegna</AppText>
+          <View style={styles.detail}>
+            <AppText style={styles.textDetail}>Benzina:</AppText>
+            <AppText>{result.benzina?.toFixed(2)} €</AppText>
+          </View>
+          <View style={styles.detail}>
+            <AppText style={styles.textDetail}>Tasse:</AppText>
+            <AppText>{result.tasse?.toFixed(2)} €</AppText>
+          </View>
+          <View style={styles.detail}>
+            <AppText style={styles.textDetail}>Guadagno:</AppText>
+            <AppText>{result.netto?.toFixed(2)} €</AppText>
+          </View>
+        </Card>
+      </Screen>
+    </ScrollView>
   );
 };
 

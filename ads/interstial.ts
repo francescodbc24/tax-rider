@@ -4,11 +4,11 @@ import {
   TestIds,
 } from "react-native-google-mobile-ads";
 //https://github.com/chelseafarley/expo-react-native-google-mobile-ads-demo/blob/main/App.js
-// const adUnitId = __DEV__
-//   ? TestIds.INTERSTITIAL
-//   : "ca-app-pub-6748193739564191/5643555401";
+const adUnitId = __DEV__
+  ? TestIds.INTERSTITIAL
+  : "ca-app-pub-6748193739564191/5643555401";
 
-const adUnitId="ca-app-pub-6748193739564191/5643555401"
+//const adUnitId="ca-app-pub-6748193739564191/5643555401"
 
 export const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
   requestNonPersonalizedAdsOnly: true,
