@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   StyleProp,
   ViewStyle,
+  View,
 } from "react-native";
 
 interface ScreenProps {
@@ -12,15 +13,16 @@ interface ScreenProps {
 }
 
 const Screen: FunctionComponent<PropsWithChildren<ScreenProps>> = ({ style, children }) => {
-  return <SafeAreaView style={[styles.screen, style]}>{children}</SafeAreaView>;
+  return <View style={[styles.screen, style]}>{children}</View>;
 };
 
 //type NamedStyles<T> = { [P in keyof T]: ViewStyle | TextStyle | ImageStyle };
 
 const styles = StyleSheet.create({
   screen: {
-    paddingTop: Platform.OS == "android" ? 25 : 0,
+    paddingTop: Platform.OS == "android" ? 25 : 30,
     flex: 1,
+    
   },
 });
 

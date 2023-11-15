@@ -12,6 +12,8 @@ import AppFormField from "../components/forms/AppFormField";
 import * as Yup from "yup";
 import { FormikHelpers, FormikValues } from "formik";
 import SubmitButton from "../components/forms/SubmitButton";
+import BannerAdd from "../ads/BannerAdd";
+
 interface CalcolateScreenProps {}
 interface IResult {
   netto: number;
@@ -81,7 +83,7 @@ const CalcolateScreen: FunctionComponent<CalcolateScreenProps> = () => {
         </AppText>
       </View>
       <Card padding={20} style={{ marginTop: 20, display: "flex", flex: 1 }}>
-        <AppText>Calcolo Consegna</AppText>
+        <AppText style={{marginBottom:20}}>Calcolo Consegna</AppText>
         <AppForm
           initialValues={{
             consume: undefined,
@@ -124,6 +126,7 @@ const CalcolateScreen: FunctionComponent<CalcolateScreenProps> = () => {
             placeholder={"Inserisce km da percorrere"}
             keyboardType="numeric"
           />
+         <BannerAdd />
           <SubmitButton title="Calcola" color="black" />
         </AppForm>
 

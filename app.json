@@ -18,6 +18,8 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.tax.rider",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -37,5 +39,9 @@
     "updates": {
       "url": "https://u.expo.dev/d6211c91-aea4-4850-aedb-ec0a08c9a726"
     }
+  },
+  "react-native-google-mobile-ads": {
+    "ios_app_id": "ca-app-pub-6748193739564191~3959671167",
+    "android_app_id": "ca-app-pub-6748193739564191~1138066702"
   }
 }
